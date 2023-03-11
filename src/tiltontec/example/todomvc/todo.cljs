@@ -1,6 +1,7 @@
 (ns tiltontec.example.todomvc.todo
   (:require
-    [tiltontec.util.core :as util :refer [pln now map-to-json json-to-map uuidv4]]
+    [tiltontec.example.util :refer [map-to-json json-to-map]]
+    [tiltontec.util.core :as util :refer [pln now   uuidv4]]
     [tiltontec.cell.base :refer [unbound] :as cbase]
     [tiltontec.cell.core
      :refer-macros [cF cFn] :refer [cI]]

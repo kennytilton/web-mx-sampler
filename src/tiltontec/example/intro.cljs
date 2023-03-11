@@ -42,7 +42,7 @@
               (button
                 {:class   :button-2
                  :disabled false
-                 :onclick #(prn :hi-mom! (evt-md %)) ;;#(mset! (fmu :climber (evt-md %)) :src  "image/chain-dag.jpeg")
+                 :onclick #(js/alert "Hello, world.") ;;#(mset! (fmu :climber (evt-md %)) :src  "image/chain-dag.jpeg")
                  }
                 "Speak")
               (demo-svg)

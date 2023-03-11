@@ -10,13 +10,15 @@
   (:require
     [clojure.string :as str]
     [taoensso.tufte :as tufte :refer-macros (defnp p profiled profile)]
-    [tiltontec.cell.base :refer [unbound ia-type]]
+    [tiltontec.util.base :refer [ mx-type]]
+    [tiltontec.cell.base :refer [unbound ]]
 
     [tiltontec.cell.core
      :refer-macros [cF cFn] :refer [cI]]
     [tiltontec.cell.observer :refer [observe-by-type]]
     [tiltontec.model.core :as md :refer [make mget mset! mswap!]]
-    [tiltontec.util.core :as util :refer [pln now map-to-json json-to-map uuidv4]]
+    [tiltontec.example.util :refer [map-to-json json-to-map]]
+    [tiltontec.util.core :as util :refer [pln now uuidv4]]
     [tiltontec.web-mx.html :refer [io-upsert io-read io-find io-truncate]
      :as tag]))
 

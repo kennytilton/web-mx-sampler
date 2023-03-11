@@ -1,9 +1,9 @@
 (ns tiltontec.example.rxtrak.rx-list-item
   (:require [cljs.pprint :as pp]
             [clojure.string :as str]
-
+            [tiltontec.util.base :refer [ mx-type]]
             [tiltontec.util.core :refer [pln xor now]]
-            [tiltontec.cell.base :refer [unbound ia-type *within-integrity* *defer-changes*]]
+            [tiltontec.cell.base :refer [unbound *within-integrity* *defer-changes*]]
             [tiltontec.cell.core :refer-macros [cF cF+ cFn cF+n cFonce] :refer [cI]]
             [tiltontec.cell.evaluate :refer [md-quiesce]]
             [tiltontec.cell.observer :refer-macros [fn-obs]]

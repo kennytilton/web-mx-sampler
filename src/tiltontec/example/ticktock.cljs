@@ -1,7 +1,8 @@
 (ns tiltontec.example.ticktock
   (:require [clojure.pprint :as pp]
             [clojure.string :as str]
-            [tiltontec.cell.core :refer-macros [cF cFonce] :refer [cI]]
+            [tiltontec.cell.base :refer [c-value]]
+            [tiltontec.cell.core :refer-macros [cF cF+ cFonce] :refer [cI]]
             [tiltontec.model.core
              :refer [mpar mget mset! mswap! mset! mxi-find mxu-find-name fmu] :as md]
             [tiltontec.web-mx.gen :refer [evt-md target-value]]
@@ -17,7 +18,7 @@
 (defn lawrence-welk [beats]
   (div {:style {:display :flex}}
     (mapv #(p (str "ah, " % "..."))
-      (mapv (fn [bn] (pp/cl-format nil "~r" (inc bn)))
+      (map (fn [bn] (pp/cl-format nil "~r" (inc bn)))
         (range beats)))))
 
 (defn time-color-value [me]
@@ -37,7 +38,18 @@
                        "*checking*"))}
     {:tick   (cI nil)
      ;; todo md-quiesce handling
-     :ticker (cF (js/setInterval #(mset! me :tick (js/Date.)) 1000))}))
+     :ticker (let [i (atom nil)]
+               (cF+ [:watch (fn [_ me new _ _]
+                              (prn :watch!! new)
+                              (reset! i new))
+                     :on-quiesce (fn [c]
+                                   (prn :finalizer!!! (c-value c))
+                                   #_ (when (number? @i)
+                                     (js/clearInterval @i))
+                                   (when (number? (c-value c))
+                                     (js/clearInterval (c-value c))))]
+                 (when (mget (fmu :app) :ticking)
+                   (js/setInterval #(mset! me :tick (js/Date.)) 1000))))}))
 
 (defn color-input [initial-color]
   (div {:class "color-input"} {:name :color-inpt}

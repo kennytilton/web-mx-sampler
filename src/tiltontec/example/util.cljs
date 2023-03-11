@@ -1,7 +1,18 @@
 (ns tiltontec.example.util
   (:require [goog.dom :as gdom]
+            [cognitect.transit :as trx]
             [tiltontec.model.core :refer [mget]]
             [tiltontec.web-mx.html :refer [tag-dom-create]]))
+
+;;; --- json -----------------------------
+
+(defn map-to-json [map]
+  (trx/write (trx/writer :json) map))
+
+(defn json-to-map [json]
+  (trx/read (trx/reader :json) json))
+
+;;; ---
 
 (defn main [mx-builder]
   (println "[main]: loading")
