@@ -35,7 +35,7 @@
      (cI nil)
 
      :ticker (cF+ [:watch (fn [_ _ new prior-value _]
-                          (prn :obs!!!!!! new)
+                          (prn :watch!!!!!! new)
                           (when (integer? prior-value)
                             (js/clearInterval prior-value)))]
                (js/setInterval

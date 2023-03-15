@@ -5,7 +5,7 @@
     [tiltontec.cell.base :refer [unbound] :as cbase]
     [tiltontec.cell.core
      :refer-macros [cF cFn] :refer [cI]]
-    [tiltontec.cell.observer :refer [observe-by-type]]
+    [tiltontec.cell.watch :refer [watch-by-type]]
     [tiltontec.model.core :as md :refer [make mget mset! mswap! def-mget]]
     [tiltontec.web-mx.html :refer [io-upsert io-read io-find io-truncate]]))
 
@@ -74,16 +74,16 @@
 
 ;;; --------------------------------------------------------------
 ;;; --- persistence, part II -------------------------------------
-;;; An observer updates individual todos in localStorage, including
+;;; An watch updates individual todos in localStorage, including
 ;;; the 'deleted' property. If we wanted to delete physically, we could
 ;;; keep the 'deleted' property on in-memory todos and handle the physical deletion
-;;; in this same observer when we see the 'deleted' property go truthy.
+;;; in this same watch when we see the 'deleted' property go truthy.
 
-(defmethod observe-by-type [::todo] [slot me new-val old-val c]
+(defmethod watch-by-type [::todo] [slot me new-val old-val c]
   ;; localStorage does not update columns, so regardless of which
   ;; slot changed we update the entire instance.
 
-  ;; unbound as the prior value means this is the initial observation fired off
+  ;; unbound as the prior value means this is the initial watch fired off
   ;; on instance initialization (to get them into the game, if you will), so skip upsert
   ;; since we store explicitly after making a new to-do. Yes, this is premature optimization.
 

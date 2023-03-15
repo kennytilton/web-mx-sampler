@@ -18,5 +18,5 @@
   ;; (io-truncate rx/RX_LS_PREFIX)
   (set! (.-innerHTML root) nil)
   (dom/appendChild root app-dom)
-  (when-let [route-starter (mget app-matrix :router-starter)]
-    (route-starter)))
+  (when-let [router-starter (mget app-matrix :router-starter)]
+    (router-starter)))

@@ -10,7 +10,7 @@
              :refer-macros [without-c-dependency]
              :refer [unbound *within-integrity* *defer-changes*]]
             [tiltontec.cell.core :refer-macros [cF cF+ cFn cF+n cFonce] :refer [cI]]
-            [tiltontec.cell.observer :refer-macros [fn-obs]]
+            [tiltontec.cell.watch :refer-macros [fn-watch]]
 
             [tiltontec.model.core
              :refer-macros [with-par]
@@ -60,19 +60,19 @@
   ;;;
   ;;; matrix-build! is responsible for building the initial matrix. Once built, app
   ;;; functionality arises from matrix objects changing in reaction to input Cell
-  ;;; "writes" made by event handlers, triggering observers which manifest those
+  ;;; "writes" made by event handlers, triggering watchs which manifest those
   ;;; changes usefully, in rxtrak either by updating the DOM or writing to localStorage.
   (reset! matrix (md/make ::rxApp
                    ;; load all to-dos into a depend-able list....
                    :rxs (rx-list)
 
                    ;; build the matrix dom once. From here on, all DOM changes are
-                   ;; made incrementally by Tag library observers...
+                   ;; made incrementally by Tag library watchs...
                    :mx-dom (cFonce (with-par me
                                      (landing-page)))
 
                    ;; the spec wants the route persisted for some reason....
-                   :route (cF+n [:obs (fn-obs               ;; fn-obs convenience macro provides handy local vars....
+                   :route (cF+n [:watch (fn-watch               ;; fn-watch convenience macro provides handy local vars....
                                         (when-not (= unbound old)
                                           (io-upsert "rx-matrixcljs.route" new)))]
                             (or (io-read "rx-matrixcljs.route") "All"))
@@ -222,7 +222,7 @@
         :onclick #(do (mset! (evt-md %) :clock (now)))
         :title "Click to reset to now."}
     {:clock  (cI (now))
-     :ticker (cF+ [:obs (fn [_ _ newv oldv c]
+     :ticker (cF+ [:watch (fn [_ _ newv oldv c]
                           ;; todo enhance finalization/hot-reload
                           (when-let [xticker @ticker-cache]
                             (js/clearInterval xticker))

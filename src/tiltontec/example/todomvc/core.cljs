@@ -50,7 +50,7 @@
       ;; HTML tag syntax is (<tag> [dom-attribute-map [custom-property map] children*]
       ;;
       :route (cI "All")
-      :route-starter (r/start! (r/router [["/" :All]
+      :router-starter #(r/start! (r/router [["/" :All]
                                           ["/active" :Active]
                                           ["/completed" :Completed]])
                        {:default     :ignore
@@ -77,5 +77,5 @@
     (tag-dom-create
       (mget app-matrix :mx-dom)))
 
-  (when-let [route-starter (md/mget app-matrix :router-starter)]
-    (route-starter)))
+  (when-let [router-starter (md/mget app-matrix :router-starter)]
+    (router-starter)))

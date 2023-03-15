@@ -15,7 +15,7 @@
 
     [tiltontec.cell.core
      :refer-macros [cF cFn] :refer [cI]]
-    [tiltontec.cell.observer :refer [observe-by-type]]
+    [tiltontec.cell.watch :refer [watch-by-type]]
     [tiltontec.model.core :as md :refer [make mget mset! mswap!]]
     [tiltontec.example.util :refer [map-to-json json-to-map]]
     [tiltontec.util.core :as util :refer [pln now uuidv4]]
@@ -115,16 +115,16 @@
   (mswap! td :completed #(if % nil (now))))
 
 ;;; --- persistence, part II -------------------------------------
-;;; An observer updates individual rxs in localStorage, including
+;;; An watch updates individual rxs in localStorage, including
 ;;; the 'deleted' property. If we wanted to delete physically, we could
 ;;; keep the 'deleted' property on in-memory rxs and handle the physical deletion
-;;; in this same observer when we see the 'deleted' go truthy.
+;;; in this same watch when we see the 'deleted' go truthy.
 
-(defmethod observe-by-type [::rx] [slot me new-val old-val c]
+(defmethod watch-by-type [::rx] [slot me new-val old-val c]
   ;; localStorage does not update columns, so regardless of which
   ;; slot changed we update the entire instance.
 
-  ;; unbound as the prior value means this is the initial observation fired off
+  ;; unbound as the prior value means this is the initial watch fired off
   ;; on instance initialization (to get them into the game, if you will), so skip upsert
   ;; since we store explicitly after making a new rx.
   (when-not (= old-val unbound)

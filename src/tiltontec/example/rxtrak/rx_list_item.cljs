@@ -6,7 +6,7 @@
             [tiltontec.cell.base :refer [unbound *within-integrity* *defer-changes*]]
             [tiltontec.cell.core :refer-macros [cF cF+ cFn cF+n cFonce] :refer [cI]]
             [tiltontec.cell.evaluate :refer [md-quiesce]]
-            [tiltontec.cell.observer :refer-macros [fn-obs]]
+            [tiltontec.cell.watch :refer-macros [fn-watch]]
             [tiltontec.cell.synapse
              :refer-macros [with-synapse]
              :refer []]
@@ -179,7 +179,7 @@
                                 ;; should not get here
                                 "white")))}
 
-    {:lookup   (cF+ [:obs (fn-obs (xhr-scavenge old))]
+    {:lookup   (cF+ [:watch (fn-watch (xhr-scavenge old))]
                  (make-xhr (pp/cl-format nil ae-by-brand
                              (js/encodeURIComponent
                                (de-whitespace (rx-title rx))))
@@ -202,7 +202,7 @@
                             "none")))
            :onclick #(js/alert "Feature not yet implemented.")}
 
-    {:ae         (cF+ [:obs (fn-obs
+    {:ae         (cF+ [:watch (fn-watch
                               (when-not (or (= old unbound) (nil? old))
                                 (md-quiesce old)))]
                    (when (mget (mxu-find-class me "ae-autocheck") :on?)
