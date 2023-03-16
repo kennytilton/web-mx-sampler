@@ -4,25 +4,17 @@
             [clojure.string :as str]
             [bide.core :as r]
             [taoensso.tufte :as tufte :refer-macros (defnp profiled profile)]
-
             [tiltontec.util.core :refer [pln xor now]]
-            [tiltontec.cell.base
-             :refer-macros [without-c-dependency]
-             :refer [unbound *within-integrity* *defer-changes*]]
-            [tiltontec.cell.core :refer-macros [cF cF+ cFn cF+n cFonce] :refer [cI]]
-
             [tiltontec.cell.poly :refer [md-quiesce]]
-            [tiltontec.matrix.api :refer [fn-watch]]
+            [tiltontec.matrix.api
+             :refer [matrix make cF cF+ cFn cF+n cFonce cI cf-freeze unbound
+                     mpar mget mset! mswap! mset! with-cc
+                     kid-values-kids mxu-find-type with-par
+                     fasc fmu fm! minfo fn-watch]]
 
-            [tiltontec.model.core
-             :refer-macros [with-par]
-             :refer [matrix mpar mget mset! mswap!
-                     fm-navig mxi-find mxu-find-type
-                     kid-values-kids] :as md]
             [tiltontec.web-mx.html
              :refer [io-read io-upsert io-clear-storage
-                     tag-dom-create
-                     dom-tag tagfo  mxu-find-class
+                     tagfo mxu-find-class
                      dom-has-class dom-ancestor-by-tag]
              :as tag]
 
@@ -30,7 +22,7 @@
              :refer-macros [section header h1 input footer p a span label ul li div button br]]
 
             [tiltontec.web-mx.gen
-             :refer [make-tag dom-tag evt-md]]
+             :refer [make-tag evt-md]]
 
             [tiltontec.web-mx.style :refer [make-css-inline]]
             [tiltontec.web-mx.widget :refer [tag-checkbox]]
@@ -64,7 +56,7 @@
   ;;; functionality arises from matrix objects changing in reaction to input Cell
   ;;; "writes" made by event handlers, triggering watchs which manifest those
   ;;; changes usefully, in rxtrak either by updating the DOM or writing to localStorage.
-  (reset! matrix (md/make ::rxApp
+  (reset! matrix (make ::rxApp
                    ;; load all to-dos into a depend-able list....
                    :rxs (rx-list)
 
@@ -74,9 +66,9 @@
                                      (landing-page)))
 
                    ;; the spec wants the route persisted for some reason....
-                   :route (cF+n [:watch (fn-watch               ;; fn-watch convenience macro provides handy local vars....
-                                        (when-not (= unbound old)
-                                          (io-upsert "rx-matrixcljs.route" new)))]
+                   :route (cF+n [:watch (fn-watch           ;; fn-watch convenience macro provides handy local vars....
+                                          (when-not (= unbound old)
+                                            (io-upsert "rx-matrixcljs.route" new)))]
                             (or (io-read "rx-matrixcljs.route") "All"))
                    :router-starter start-router)))
 
@@ -106,9 +98,9 @@
        (h1 "&#x211e;Trak")
        (rx-entry-field))
      (rx-list-items)
-     (div {:style {:display          "flex"
-                   :flex-direction   "row"
-                   :justify-content  "space-between"}}
+     (div {:style {:display         "flex"
+                   :flex-direction  "row"
+                   :justify-content "space-between"}}
        (ae-autocheck? me)
        (check-interactions me))
      (dashboard-footer))
@@ -175,8 +167,8 @@
             ::tag/type "checkbox"
             :checked   (cF (= (mget (mpar me) :action) :uncomplete))})
     (label {:for     "toggle-all"
-            :title (cF (if (= (mget (mpar me) :action) :uncomplete)
-                         "Mark all as incomplete" "Mark all as complete"))
+            :title   (cF (if (= (mget (mpar me) :action) :uncomplete)
+                           "Mark all as incomplete" "Mark all as complete"))
             ;; a bit ugly: handler below is not in kids rule of LABEL, so 'me' is the DIV, not the LABEL.
             :onclick #(let [action (mget me :action)]
                         (event/preventDefault %)            ;; else browser messes with checked, which we handle
@@ -222,19 +214,18 @@
                                (mget me :clock)))
                        4))
         :onclick #(do (mset! (evt-md %) :clock (now)))
-        :title "Click to reset to now."}
+        :title   "Click to reset to now."}
     {:clock  (cI (now))
      :ticker (cF+ [:watch (fn [_ _ newv oldv c]
-                          ;; todo enhance finalization/hot-reload
-                          (when-let [xticker @ticker-cache]
-                            (js/clearInterval xticker))
-                          (reset! ticker-cache newv))]
-               (without-c-dependency
-                 (js/setInterval
-                   #(let [time-step (* 6 3600 1000)
-                          w (mget me :clock)]
-                      (mswap! me :clock + time-step))
-                   1000)))}))
+                            ;; todo enhance finalization/hot-reload
+                            (when-let [xticker @ticker-cache]
+                              (js/clearInterval xticker))
+                            (reset! ticker-cache newv))]
+               (js/setInterval
+                 #(let [time-step (* 6 3600 1000)
+                        w (mget me :clock)]
+                    (mswap! me :clock + time-step))
+                 1000))}))
 
 ;; --- AE autocheck -----------------------
 

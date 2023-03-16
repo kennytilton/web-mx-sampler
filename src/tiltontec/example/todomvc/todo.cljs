@@ -14,7 +14,7 @@
 (declare td-upsert td-deleted td-completed make-todo load-all)
 
 (defn todo-list []
-  (md/make ::todo-list
+  (make ::todo-list
     ;; the bulk of the to-do app does not care about deleted to-dos,
     ;; so we use a clumsy name "items-raw" for the true list of items
     ;; ever created, and save "items" for the ones actually used.
@@ -54,7 +54,7 @@
                      :due-by    (cI (+ (now) (* 4 24 60 60 1000)))
                      :deleted   (cI nil)})]
     (td-upsert
-      (apply md/make (flatten (into [] net-slots))))))
+      (apply make (flatten (into [] net-slots))))))
 
 ;;; --------------------------------------------------------
 ;;; --- handy accessors to hide mget etc ------------------
@@ -93,7 +93,7 @@
 ;;; --- loading from localStorage ----------------
 
 (defn- remake-todo [{:keys [title completed due-by deleted] :as islots}]
-  (apply md/make
+  (apply make
     (flatten
       (into []
         (merge islots

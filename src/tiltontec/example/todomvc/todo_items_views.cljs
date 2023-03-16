@@ -42,7 +42,7 @@
 
 (defn mx-find-matrix [mx]
   (assert mx)
-  (mxu-find-type mx ::md/todoApp))
+  (mxu-find-type mx :todoApp))
 
 ;; Unsurprisingly, the state of the to-dos themselves
 ;; drives most of the TodoMVC dynamic behavior being exercised.

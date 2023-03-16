@@ -2,9 +2,11 @@
   (:require
     [goog.dom :as dom]
     [taoensso.tufte :as tufte]
-    [tiltontec.cell.core :refer-macros [cF cF+ cFn cF+n cFonce cF1] :refer [cI]]
-    [tiltontec.model.core
-     :refer [with-par matrix mpar mget mset! mswap! mxu-find-type] :as md]
+
+    [tiltontec.matrix.api
+     :refer [matrix make cF cF+ cFn cFonce cI cf-freeze
+             mpar mget mset! mswap! mset! with-cc
+             fasc fmu fm! minfo with-par]]
     [tiltontec.web-mx.html :refer [tag-dom-create]]
     [tiltontec.web-mx.gen-macro
      :refer [div section header h1 footer p ul
@@ -43,8 +45,8 @@
                             (form/setValue (.-target %) "")))}))
 
 (defn matrix-build! []
-  (reset! md/matrix
-    (md/make ::md/todoApp
+  (reset! matrix
+    (make :todoApp
       ;; ^^^ we provide an optional "type" to support Matrix node space search
       ;;
       ;; HTML tag syntax is (<tag> [dom-attribute-map [custom-property map] children*]
@@ -55,7 +57,7 @@
                                           ["/completed" :Completed]])
                        {:default     :ignore
                         :on-navigate (fn [route params query]
-                                       (when-let [mtx @md/matrix]
+                                       (when-let [mtx @matrix]
                                          (mset! mtx :route (name route))))})
       :todos (todo/todo-list)
       :mx-dom (cFonce
@@ -77,5 +79,5 @@
     (tag-dom-create
       (mget app-matrix :mx-dom)))
 
-  (when-let [router-starter (md/mget app-matrix :router-starter)]
+  (when-let [router-starter (mget app-matrix :router-starter)]
     (router-starter)))

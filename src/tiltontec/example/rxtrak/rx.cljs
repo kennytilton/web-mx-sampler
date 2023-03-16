@@ -37,7 +37,7 @@
 (def RX_LS_PREFIX "rx-rxtrak.")
 
 (defn rx-list []
-  (md/make ::rx-list
+  (make ::rx-list
     :items-raw (cFn (load-all))
     :items (cF (p :items (doall (remove rx-deleted (mget me :items-raw)))))
 
@@ -75,7 +75,7 @@
                      :due-by    (cI nil #_(+ (now) (* 4 24 60 60 1000)))
                      :completed (cI nil)
                      :deleted   (cI nil)})
-        rx (apply md/make (flatten (into [] net-slots)))]
+        rx (apply make (flatten (into [] net-slots)))]
     (rx-upsert rx)
     rx))
 
@@ -145,7 +145,7 @@
          (io-find RX_LS_PREFIX))))
 
 (defn- remake-rx [islots]
-  (apply md/make
+  (apply make
          (flatten
            (into []
                  (merge islots

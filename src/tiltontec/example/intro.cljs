@@ -1,14 +1,14 @@
 (ns tiltontec.example.intro
   (:require [clojure.pprint :as pp]
             [clojure.string :as str]
-            [tiltontec.cell.core :refer [cF cF+ cFonce cI]]
-            [tiltontec.model.core
-             :refer [mpar mget mset! mswap! mset! mxi-find mxu-find-name fmu] :as md]
+            [tiltontec.matrix.api
+             :refer [make cF cF+ cFn cFonce cI cf-freeze
+                     mpar mget mset! mswap! mset! with-cc
+                     fasc fmu fm! minfo]]
             [tiltontec.web-mx.gen :refer [evt-md target-value]]
             [tiltontec.web-mx.gen-macro
              :refer [img section h1 h2 h3 input footer p a
                      span i label ul li div button br
-                     svg g circle p span div
                      svg g circle p span div text radialGradient defs stop
                      rect ellipse line polyline path polygon script use]]
             [tiltontec.web-mx.style :refer [make-css-inline]]
@@ -35,7 +35,7 @@
 ;;; --- matrix build ------------------------------------------------
 
 (defn matrix-build! []
-  (md/make ::intro
+  (make ::intro
     :mx-dom (div {:class "intro"}
               (h2 "Nothing to see here.")
               (p "But feel free to hang out.")

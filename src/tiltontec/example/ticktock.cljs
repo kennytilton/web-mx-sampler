@@ -1,10 +1,10 @@
 (ns tiltontec.example.ticktock
   (:require [clojure.pprint :as pp]
             [clojure.string :as str]
-            [tiltontec.cell.base :refer [c-value]]
-            [tiltontec.cell.core :refer-macros [cF cF+ cFonce] :refer [cI]]
-            [tiltontec.model.core
-             :refer [mpar mget mset! mswap! mset! mxi-find mxu-find-name fmu] :as md]
+            [tiltontec.matrix.api
+             :refer [make cF cF+ cFn cFonce cI cf-freeze c-value
+                     mpar mget mset! mswap! mset! with-cc
+                     fasc fmu fm! minfo]]
             [tiltontec.web-mx.gen :refer [evt-md target-value]]
             [tiltontec.web-mx.gen-macro
              :refer [img section h1 h2 h3 input footer p a
@@ -22,7 +22,7 @@
         (range beats)))))
 
 (defn time-color-value [me]
-  (if-let [tc (mxu-find-name me :timecolor)]
+  (if-let [tc (fmu :timecolor)]
     (mget tc :value)
     (throw (js/Error "time-color-value> Unable to find widget named :timecolor"))))
 
@@ -80,7 +80,7 @@
                              :else :invalid)))})))
 
 (defn matrix-build! []
-  (md/make ::ticktock
+  (make ::ticktock
     :mx-dom (cFonce
               (div {:class "ticktock"}
                 {:name    :app

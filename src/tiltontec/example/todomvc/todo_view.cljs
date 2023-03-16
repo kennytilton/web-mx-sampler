@@ -5,7 +5,6 @@
     [goog.dom.forms :as form]
 
     [tiltontec.util.core :as util]
-    [tiltontec.cell.base :refer [unbound]]
     [tiltontec.cell.poly :refer [md-quiesce]]
     [tiltontec.matrix.api :refer [fn-watch]]
     [tiltontec.cell.core :refer-macros [cF cF+]]
@@ -81,7 +80,7 @@
                ;; we actually have a td-delete! to hide the action, but
                ;; this is a tutorial so let's show the action and use mset!.
                ;; btw, yes, we extend here the spec to support logical deletion
-               :onclick #(md/mset! todo :deleted (util/now))}))
+               :onclick #(mset! todo :deleted (util/now))}))
 
     (input {:class     "edit"
             :onblur    #(todo-edit % todo true)
