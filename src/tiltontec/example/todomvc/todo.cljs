@@ -5,7 +5,7 @@
     [tiltontec.cell.base :refer [unbound] :as cbase]
     [tiltontec.cell.core
      :refer-macros [cF cFn] :refer [cI]]
-    [tiltontec.cell.watch :refer [watch-by-type]]
+    [tiltontec.cell.poly :refer [watch-by-type]]
     [tiltontec.model.core :as md :refer [make mget mset! mswap! def-mget]]
     [tiltontec.web-mx.html :refer [io-upsert io-read io-find io-truncate]]))
 

@@ -15,7 +15,9 @@
 
     [tiltontec.cell.core
      :refer-macros [cF cFn] :refer [cI]]
-    [tiltontec.cell.watch :refer [watch-by-type]]
+
+    [tiltontec.cell.poly :refer [watch-by-type]]
+
     [tiltontec.model.core :as md :refer [make mget mset! mswap!]]
     [tiltontec.example.util :refer [map-to-json json-to-map]]
     [tiltontec.util.core :as util :refer [pln now uuidv4]]

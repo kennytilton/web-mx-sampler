@@ -10,7 +10,9 @@
              :refer-macros [without-c-dependency]
              :refer [unbound *within-integrity* *defer-changes*]]
             [tiltontec.cell.core :refer-macros [cF cF+ cFn cF+n cFonce] :refer [cI]]
-            [tiltontec.cell.watch :refer-macros [fn-watch]]
+
+            [tiltontec.cell.poly :refer [md-quiesce]]
+            [tiltontec.matrix.api :refer [fn-watch]]
 
             [tiltontec.model.core
              :refer-macros [with-par]

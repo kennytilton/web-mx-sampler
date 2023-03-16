@@ -5,8 +5,8 @@
             [tiltontec.util.core :refer [pln xor now]]
             [tiltontec.cell.base :refer [unbound *within-integrity* *defer-changes*]]
             [tiltontec.cell.core :refer-macros [cF cF+ cFn cF+n cFonce] :refer [cI]]
-            [tiltontec.cell.evaluate :refer [md-quiesce]]
-            [tiltontec.cell.watch :refer-macros [fn-watch]]
+            [tiltontec.cell.poly :refer [md-quiesce]]
+            [tiltontec.matrix.api :refer [fn-watch]]
             [tiltontec.cell.synapse
              :refer-macros [with-synapse]
              :refer []]

@@ -6,7 +6,8 @@
 
     [tiltontec.util.core :as util]
     [tiltontec.cell.base :refer [unbound]]
-    [tiltontec.cell.watch :refer-macros [fn-watch]]
+    [tiltontec.cell.poly :refer [md-quiesce]]
+    [tiltontec.matrix.api :refer [fn-watch]]
     [tiltontec.cell.core :refer-macros [cF cF+]]
 
     [tiltontec.model.core :refer [matrix mpar mget mset! ;; mswap!
