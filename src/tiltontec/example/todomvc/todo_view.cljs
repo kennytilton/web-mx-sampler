@@ -17,7 +17,7 @@
      :refer [make-xhr xhr-response]]
 
     [tiltontec.web-mx.api
-     :refer [label li div input button span i]]
+     :refer [input-editing-start label li div input button span i]]
 
     [tiltontec.example.todomvc.todo
      :refer [td-title td-created
@@ -72,7 +72,7 @@
                                  edt-dom (dom/getElementByClass
                                            "edit" li-dom)]
                              (classlist/add li-dom "editing")
-                             (web-mx/input-editing-start edt-dom (td-title todo)))}
+                             (input-editing-start edt-dom (td-title todo)))}
         (td-title todo))
 
       (button {:class   "destroy"

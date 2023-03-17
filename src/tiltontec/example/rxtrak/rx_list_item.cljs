@@ -25,7 +25,7 @@
              :refer [make-xhr send-xhr send-unparsed-xhr xhr-send xhr-await xhr-status
                      xhr-status-key xhr-resolved xhr-error xhr-error? xhrfo synaptic-xhr synaptic-xhr-unparsed
                      xhr-selection xhr-to-map xhr-name-to-map xhr-response]]
-            [tiltontec.web-mx.api
+            [tiltontec.web-mx.api :as wx
              :refer [section header h1 input footer p a span label ul li div button br i]]
             [tiltontec.web-mx.style :refer [make-css-inline]]
 
@@ -75,7 +75,7 @@
                                       (conj % rx))))
                    :ondblclick #(do
                                   (mset! rx-li :editing? true)
-                                  (tag/input-editing-start
+                                  (wx/input-editing-start
                                     (dom/getElementByClass "edit" (tag-dom rx-li))
                                     (rx-title rx)))}
              (rx-title rx))
