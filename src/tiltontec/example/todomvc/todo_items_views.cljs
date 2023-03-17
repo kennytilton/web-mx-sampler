@@ -12,10 +12,9 @@
      :refer [matrix mpar mget mset! mswap!
              kid-values-kids mxu-find-type] :as md]
 
-    [tiltontec.web-mx.gen-macro
-     :refer-macros [div section header h1 footer p ul li a
+    [tiltontec.web-mx.api
+     :refer [div section header h1 footer p ul li a
                     input label span button]]
-    [tiltontec.web-mx.html :as web-mx]
 
     [tiltontec.example.todomvc.todo
      :refer [td-created td-completed td-delete!] :as todo]
@@ -81,7 +80,7 @@
                          :uncomplete :complete))}
     (input {:id        "toggle-all"
             :class     "toggle-all"
-            ::web-mx/type "checkbox"
+            :type "checkbox"
             :checked   (cF (= (mget (mpar me) :action) :uncomplete))})
     (label {:for     "toggle-all"
             :onclick #(let [action (mget me :action)]

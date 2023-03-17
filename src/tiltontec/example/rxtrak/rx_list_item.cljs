@@ -25,8 +25,8 @@
              :refer [make-xhr send-xhr send-unparsed-xhr xhr-send xhr-await xhr-status
                      xhr-status-key xhr-resolved xhr-error xhr-error? xhrfo synaptic-xhr synaptic-xhr-unparsed
                      xhr-selection xhr-to-map xhr-name-to-map xhr-response]]
-            [tiltontec.web-mx.gen-macro
-             :refer-macros [section header h1 input footer p a span label ul li div button br i]]
+            [tiltontec.web-mx.api
+             :refer [section header h1 input footer p a span label ul li div button br i]]
             [tiltontec.web-mx.style :refer [make-css-inline]]
 
             [goog.dom :as dom]

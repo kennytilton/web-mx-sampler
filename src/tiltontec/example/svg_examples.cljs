@@ -7,12 +7,13 @@
              :refer [matrix with-par cFkids make cF cF+ cFn cFonce cI cf-freeze unbound
                      mpar mget mset! mswap! mset! with-cc
                      fasc fmu fm! minfo]]
-            [tiltontec.web-mx.base :as wbase]
-            [tiltontec.web-mx.gen :refer [evt-md target-value make-svg]]
-            [tiltontec.web-mx.gen-macro
-             :refer [jso-map]
-             :refer-macros [svg g circle p span div text radialGradient defs stop
-                            rect ellipse line polyline path polygon script use]]
+            [tiltontec.web-mx.api
+             :refer [js-obj->map evt-md target-value make-css-inline js-interval-register
+                     img section h1 h2 h3 input footer p a
+                     span i label ul li div button br
+                     make-svg svg g circle p span div
+                     text radialGradient defs stop
+                     rect ellipse line polyline path polygon script use]]
             [tiltontec.example.util :as ex-util]))
 
 (defn wall-clock []
@@ -26,7 +27,7 @@
      :ticker (cF+ [:watch (fn [_ _ nv ov c]
                           (when (not= ov unbound)
                             (js/clearInterval ov)))]
-               (wbase/js-interval-register
+               (js-interval-register
                  ;; needed during development so hot reload does not pile up intervals
                  (js/setInterval #(mset! me :tick (.getSeconds (js/Date.))) 1000)))}))
 
@@ -114,7 +115,7 @@
                :fill         (cI :black)
                :onclick      (cF (fn [evt]
                                    (let [e (walk/keywordize-keys
-                                             (jso-map evt))]
+                                             (js-obj->map evt))]
                                      ;; check that it was not a "use" clone that got clicked.
                                      (when (= (domx me) (:target e))
                                        (prn :onclick-circle-original)

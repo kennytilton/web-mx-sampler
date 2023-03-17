@@ -16,9 +16,8 @@
     [tiltontec.mxxhr.core
      :refer [make-xhr xhr-response]]
 
-    [tiltontec.web-mx.gen-macro
-     :refer-macros [label li div input button span i]]
-    [tiltontec.web-mx.html :as web-mx]
+    [tiltontec.web-mx.api
+     :refer [label li div input button span i]]
 
     [tiltontec.example.todomvc.todo
      :refer [td-title td-created
@@ -59,7 +58,7 @@
     (div {:class "view"}
       (input {:class       "toggle"
               ;; namespaced :type is for HTML attribute
-              ::web-mx/type "checkbox"
+              :type "checkbox"
               :checked     (cF
                              ;; completed is not a boolean, it is
                              ;; a timestamp that is nil? until the to-do is completed

@@ -7,9 +7,8 @@
      :refer [matrix make cF cF+ cFn cFonce cI cf-freeze
              mpar mget mset! mswap! mset! with-cc
              fasc fmu fm! minfo with-par]]
-    [tiltontec.web-mx.html :refer [tag-dom-create]]
-    [tiltontec.web-mx.gen-macro
-     :refer [div section header h1 footer p ul
+    [tiltontec.web-mx.api
+     :refer [tag-dom-create div section header h1 footer p ul
                     li span input label]]
     [tiltontec.example.todomvc.todo
      :refer [make-todo td-title td-completed] :as todo]

@@ -9,8 +9,8 @@
      :refer [matrix mpar mget mset! mswap!
              fm-navig mxi-find mxu-find-type
              kid-values-kids] :as md]
-    [tiltontec.web-mx.gen-macro
-     :refer-macros [div section header h1 footer p ul li span]]
+    [tiltontec.web-mx.api
+     :refer [div section header h1 footer p ul li span]]
     [tiltontec.example.todomvc.todo
      :refer [make-todo td-title] :as todo]))
 

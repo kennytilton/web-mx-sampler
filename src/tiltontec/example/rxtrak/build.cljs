@@ -18,11 +18,8 @@
                      dom-has-class dom-ancestor-by-tag]
              :as tag]
 
-            [tiltontec.web-mx.gen-macro
-             :refer-macros [section header h1 input footer p a span label ul li div button br]]
-
-            [tiltontec.web-mx.gen
-             :refer [make-tag evt-md]]
+            [tiltontec.web-mx.api
+             :refer [evt-md section header h1 input footer p a span label ul li div button br]]
 
             [tiltontec.web-mx.style :refer [make-css-inline]]
             [tiltontec.web-mx.widget :refer [tag-checkbox]]

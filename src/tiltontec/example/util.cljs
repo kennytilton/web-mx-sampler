@@ -2,7 +2,7 @@
   (:require [goog.dom :as gdom]
             [cognitect.transit :as trx]
             [tiltontec.model.core :refer [mget]]
-            [tiltontec.web-mx.html :refer [tag-dom-create]]))
+            [tiltontec.web-mx.api :refer [tag-dom-create]]))
 
 ;;; --- json -----------------------------
 
