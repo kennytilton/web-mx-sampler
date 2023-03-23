@@ -45,7 +45,7 @@
   ;;  use another timestamp for logical deletion.
   ;;
   (let [net-slots (merge
-                    {:type      ::todo
+                    {:mx-type      ::todo
                      :id        (str TODO_LS_PREFIX (uuidv4))
                      :created   (util/now)
                      ;; now wrap mutable slots as Cells...
@@ -97,7 +97,7 @@
     (flatten
       (into []
         (merge islots
-          {:type      ::todo
+          {:mx-type      ::todo
            ;; next, we wrap in cells those reloaded slots we might
            ;; mutate (not id or created)...
            :title     (cI title)

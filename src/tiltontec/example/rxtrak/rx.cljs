@@ -67,7 +67,7 @@
   [islots]
 
   (let [net-slots (merge
-                    {:type      ::rx
+                    {:mx-type      ::rx
                      :id        (str RX_LS_PREFIX (uuidv4))
                      :created   (now)
                      ;; now wrap mutable slots as Cells...
@@ -85,36 +85,37 @@
 
 ;;; --- handy accessors to hide mget / mset! ------------------
 
-(defn rx-created [td]
+(defn rx-created [rx]
   ;; created is not a Cell because it never changes, but we use the mget API anyway
   ;; just in case that changes. (mget can handle normal slots not wrapped in cells.)
-  (mget td :created))
+  (mget rx :created))
 
-(defn rx-title [td]
-  (mget td :title))
+(defn rx-title [rx]
+  (mget rx :title))
 
-(defn rx-id [td]
-  (mget td :id))
+(defn rx-id [rx]
+  (mget rx :id))
 
-(defn rx-due-by [td]
-  (mget td :due-by))
+(defn rx-due-by [rx]
+  (mget rx :due-by))
 
-(defn rx-completed [td]
-  (mget td :completed))
+(defn rx-completed [rx]
+  (mget rx :completed))
 
-(defn rx-deleted [td]
+(defn rx-deleted [rx]
   ;; created is not a Cell because it never changes, but we use the mget API anyway
   ;; just in case that changes (eg, to implement un-delete)
-  (mget td :deleted))
+  (mget rx :deleted))
 
 ; - dataflow triggering mutations
 
-(defn rx-delete! [td]
-  (assert td)
-  (mset! td :deleted (now)))
+(defn rx-delete! [rx]
+  (assert rx)
+  (prn :deleting!!! (mx-type rx) (meta rx))
+  (mset! rx :deleted (now)))
 
-(defn rx-toggle-completed! [td]
-  (mswap! td :completed #(if % nil (now))))
+(defn rx-toggle-completed! [rx]
+  (mswap! rx :completed #(if % nil (now))))
 
 ;;; --- persistence, part II -------------------------------------
 ;;; An watch updates individual rxs in localStorage, including
@@ -129,6 +130,7 @@
   ;; unbound as the prior value means this is the initial watch fired off
   ;; on instance initialization (to get them into the game, if you will), so skip upsert
   ;; since we store explicitly after making a new rx.
+  (prn :w-by-type-upserting!!!!-for-slot slot)
   (when-not (= old-val unbound)
     (rx-upsert me)))
 
@@ -149,7 +151,7 @@
          (flatten
            (into []
                  (merge islots
-                        {:type      ::rx
+                        {:mx-type      ::rx
                          ;; we wrap in cells those reloaded slots we might mutate...
                          :title     (cI (:title islots))
                          :due-by    (cI (:due-by islots))
@@ -161,10 +163,10 @@
 
 (declare rx-to-json)
 
-(defn- rx-upsert [td]
-  (io-upsert (:id @td)
+(defn- rx-upsert [rx]
+  (io-upsert (:id @rx)
              (.stringify js/JSON
-                         (rx-to-json td))))
+                         (rx-to-json rx))))
 
 (defn- rx-to-json [rx]
   (map-to-json (into {} (for [k [:id :created :title :due-by :completed :deleted]]

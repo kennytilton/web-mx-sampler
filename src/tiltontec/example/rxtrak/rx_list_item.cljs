@@ -1,7 +1,7 @@
 (ns tiltontec.example.rxtrak.rx-list-item
   (:require [cljs.pprint :as pp]
             [clojure.string :as str]
-            [tiltontec.util.base :refer [ mx-type]]
+            [tiltontec.util.base :refer [mx-type]]
             [tiltontec.util.core :refer [pln xor now]]
             [tiltontec.cell.base :refer [unbound *within-integrity* *defer-changes*]]
             [tiltontec.cell.core :refer-macros [cF cF+ cFn cF+n cFonce] :refer [cI]]
@@ -135,15 +135,19 @@
                                                   (not (rx-due-by rx)))
                                               "none" "block"))
                                :background-color (cF (when-let [clock (mxu-find-class (:tag @me) "std-clock")]
+                                                       (prn :bgcolor-runs!!!)
                                                        (if-let [due (rx-due-by rx)]
-                                                         (if (rx-completed rx)
-                                                           _cache ;; cF expansion has _cache (prior value) in lexical scope
-                                                           (let [time-left (- due (mget clock :clock))]
-                                                             (cond
-                                                               (neg? time-left) "red"
-                                                               (< time-left (* 24 3600 1000)) "coral"
-                                                               (< time-left (* 2 24 3600 1000)) "yellow"
-                                                               :default "none")))
+                                                         (do
+                                                           (prn :due-by!!! due)
+                                                           (if (rx-completed rx)
+                                                             _cache ;; cF expansion has _cache (prior value) in lexical scope
+                                                             (let [time-left (- due (mget clock :clock))]
+                                                               (prn :time-left time-left)
+                                                               (cond
+                                                                 (neg? time-left) "red"
+                                                                 (< time-left (* 24 3600 1000)) "coral"
+                                                                 (< time-left (* 2 24 3600 1000)) "yellow"
+                                                                 :default "cyan"))))
                                                          "linen")))))}))
 
 ;;; -----------------------------------------------------------
@@ -167,7 +171,7 @@
   (prn :rx-title (rx-title rx))
   (i
     {:class   "aes material-icons"
-     :title "Nothing to take seriously; the AE DB almost always has something. Try 'dog', tho."
+     :title   "Nothing to take seriously; the AE DB almost always has something. Try 'dog', tho."
      :onclick #(js/alert "Feature to display AEs not yet implemented")
      :style   (cF (str "font-size:36px"
                     ";display:" (case (mget me :aes?)
@@ -203,8 +207,8 @@
            :onclick #(js/alert "Feature not yet implemented.")}
 
     {:ae         (cF+ [:watch (fn-watch
-                              (when-not (or (= old unbound) (nil? old))
-                                (md-quiesce old)))]
+                                (when-not (or (= old unbound) (nil? old))
+                                  (md-quiesce old)))]
                    (when (mget (mxu-find-class me "ae-autocheck") :on?)
                      #_(prn :sending (pp/cl-format nil ae-by-brand
                                        (js/encodeURIComponent (rx-title rx))))
