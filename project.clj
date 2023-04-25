@@ -15,8 +15,9 @@
                  [cljs-http "0.1.46"]
                  [cheshire "5.11.0"]
                  [com.taoensso/tufte "2.4.5"]
-                 [com.tiltontec/matrix "5.0.1-SNAPSHOT"]
-                 [com.tiltontec/web-mx "2.0.1-SNAPSHOT"]]
+                 [com.tiltontec/matrix "5.0.1"]
+                 [com.tiltontec/web-mx "2.0.1"]
+                 [com.tiltontec/mxxhr "2.0.0-SNAPSHOT"]]
   :profiles
   {:dev
    {:dependencies [[org.clojure/clojurescript "1.10.773"]
