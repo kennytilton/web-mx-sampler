@@ -1,4 +1,4 @@
-(defproject com.tiltontec/web-mx "1.0.0-SNAPSHOT"
+(defproject com.tiltontec/web-mx-sampler "1.0.0-SNAPSHOT"
   :description "A Web un-Framework powered by Matrix(tm)"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
@@ -15,8 +15,8 @@
                  [cljs-http "0.1.46"]
                  [cheshire "5.11.0"]
                  [com.taoensso/tufte "2.4.5"]
-                 [com.tiltontec/matrix "5.0.1"]
-                 [com.tiltontec/web-mx "2.0.1"]
+                 [com.tiltontec/matrix "5.0.1-SNAPSHOT"]
+                 [com.tiltontec/web-mx "2.0.2-SNAPSHOT"]
                  [com.tiltontec/mxxhr "2.0.0-SNAPSHOT"]]
   :profiles
   {:dev
