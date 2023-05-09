@@ -84,6 +84,17 @@
             :checked   (cF (= (mget (mpar me) :action) :uncomplete))})
     (label {:for     "toggle-all"
             :onclick #(let [action (mget me :action)]
+                        ;; NB! this ^^ me is a lexical anaphor supplied by the `cFkids` formula
+                        ;; macro that invisibly wraps all Web/MX component children. `me` is akin
+                        ;; to Smalltalk `self` or JS `this`, and all the cF macros supply it.
+                        ;; Since the `label` is a child of the DIV, me is bound to the DIV, where the
+                        ;; desired :action lives. This is a unique situation in that, in a handler, we usually
+                        ;; want a reference to the object owning a handler. We could achieve
+                        ;; that by simply wrapping the handler in `cF`. It will run just once
+                        ;; and then be optimized away, so there is no memory or performance hit, but we
+                        ;; would get the desired `me` (in a different situation -- here we are happy
+                        ;; to have a reference to the DIV).
+                        ;;
                         ;; preventDefault else browser messes with checked, which _we_ handle
                         (event/preventDefault %)
                         (doseq [td (mx-todo-items)]
