@@ -1,13 +1,30 @@
 (ns tiltontec.example.todomvc.todo
   (:require
-    [tiltontec.example.util :refer [map-to-json json-to-map]]
-    [tiltontec.util.core :as util :refer [pln now   uuidv4]]
-    [tiltontec.cell.base :refer [unbound] :as cbase]
-    [tiltontec.cell.core
-     :refer-macros [cF cFn] :refer [cI]]
-    [tiltontec.cell.poly :refer [watch-by-type]]
-    [tiltontec.model.core :as md :refer [make mget mset! mswap! def-mget]]
+    [tiltontec.cell.poly :refer [watch watch-by-type]]
+    [tiltontec.matrix.api
+     :refer [unbound matrix make cF cF+ cFn cFonce cI cf-freeze
+             def-mget mpar mget mset! mswap! mset! with-cc
+             fasc fmu fm! minfo with-par]]
+    [tiltontec.web-mx.api :refer [map-to-json json-to-map]]
     [tiltontec.web-mx.html :refer [io-upsert io-read io-find io-truncate]]))
+
+;;; --- util --------------------------------
+
+(defn now []
+  (.getTime (js/Date.)))
+
+(defn uuidv4 []
+  (letfn [(hex [] (.toString (rand-int 16) 16))]
+    (let [rhex (.toString (bit-or 0x8 (bit-and 0x3 (rand-int 16))) 16)]
+      (uuid
+        (str (hex) (hex) (hex) (hex)
+          (hex) (hex) (hex) (hex) "-"
+          (hex) (hex) (hex) (hex) "-"
+          "4" (hex) (hex) (hex) "-"
+          rhex (hex) (hex) (hex) "-"
+          (hex) (hex) (hex) (hex)
+          (hex) (hex) (hex) (hex)
+          (hex) (hex) (hex) (hex))))))
 
 (def TODO_LS_PREFIX "todos-matrixcljs.")
 
@@ -47,7 +64,7 @@
   (let [net-slots (merge
                     {:mx-type      ::todo
                      :id        (str TODO_LS_PREFIX (uuidv4))
-                     :created   (util/now)
+                     :created   (now)
                      ;; now wrap mutable slots as Cells...
                      :title     (cI (:title islots))
                      :completed (cI nil)
@@ -66,11 +83,11 @@
 ;;; --- dataflow triggering setters to hide mset!
 
 (defn td-delete! [td]
-  (mset! td :deleted (util/now)))
+  (mset! td :deleted (now)))
 
 (defn td-toggle-completed! [td]
   (mswap! td :completed
-    #(when-not % (util/now))))
+    #(when-not % (now))))
 
 ;;; --------------------------------------------------------------
 ;;; --- persistence, part II -------------------------------------

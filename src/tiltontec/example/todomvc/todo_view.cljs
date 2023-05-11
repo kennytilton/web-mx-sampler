@@ -4,14 +4,11 @@
     [goog.dom.classlist :as classlist]
     [goog.dom.forms :as form]
 
-    [tiltontec.util.core :as util]
-    [tiltontec.cell.poly :refer [md-quiesce]]
-    [tiltontec.matrix.api :refer [fn-watch]]
-    [tiltontec.cell.core :refer-macros [cF cF+]]
-
-    [tiltontec.model.core :refer [matrix mpar mget mset! ;; mswap!
-                                  ;;fm-navig mxi-find mxu-find-type
-                                  ] :as md]
+    [tiltontec.matrix.api
+     :refer [unbound matrix make cF cF+ cF+n cFn cFonce cI cf-freeze
+             def-mget mpar mget mset! mswap! mset! with-cc
+             kid-values-kids mxu-find-type
+             fasc fmu fm! minfo with-par]]
 
     [tiltontec.mxxhr.core
      :refer [make-xhr xhr-response]]
@@ -20,11 +17,12 @@
      :refer [input-editing-start label li div input button span i]]
 
     [tiltontec.example.todomvc.todo
-     :refer [td-title td-created
+     :refer [now td-title td-created
              td-completed td-delete!
              td-id td-toggle-completed!]]
     [cljs.pprint :as pp]
     [clojure.string :as str]))
+
 
 (defn todo-edit [e todo edit-commited?]
   (let [edt-dom (.-target e)
@@ -79,7 +77,7 @@
                ;; we actually have a td-delete! to hide the action, but
                ;; this is a tutorial so let's show the action and use mset!.
                ;; btw, yes, we extend here the spec to support logical deletion
-               :onclick #(mset! todo :deleted (util/now))}))
+               :onclick #(mset! todo :deleted (now))}))
 
     (input {:class     "edit"
             :onblur    #(todo-edit % todo true)

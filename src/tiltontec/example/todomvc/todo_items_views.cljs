@@ -2,22 +2,18 @@
   (:require
     [goog.events.Event :as event]
 
-    [tiltontec.util.core :as util]
-
-    [tiltontec.cell.core :refer-macros [cF cF+ cFn cF+n cFonce] :refer [cI]]
-
-    [tiltontec.model.core
-     ; todo trim
-     :refer-macros [with-par]
-     :refer [matrix mpar mget mset! mswap!
-             kid-values-kids mxu-find-type] :as md]
+    [tiltontec.matrix.api
+     :refer [unbound matrix make cF cF+ cF+n cFn cFonce cI cf-freeze
+             def-mget mpar mget mset! mswap! mset! with-cc
+             kid-values-kids mxu-find-type
+             fasc fmu fm! minfo with-par]]
 
     [tiltontec.web-mx.api
      :refer [div section header h1 footer p ul li a
                     input label span button]]
 
     [tiltontec.example.todomvc.todo
-     :refer [td-created td-completed td-delete!] :as todo]
+     :refer [now td-created td-completed td-delete!] :as todo]
     [tiltontec.example.todomvc.todo-view
      :refer [todo-list-item]]
     [cljs.pprint :as pp]))
@@ -98,7 +94,7 @@
                         ;; preventDefault else browser messes with checked, which _we_ handle
                         (event/preventDefault %)
                         (doseq [td (mx-todo-items)]
-                          (mset! td :completed (when (= action :complete) (util/now)))))}
+                          (mset! td :completed (when (= action :complete) (now)))))}
       "Mark all as complete")))
 
 ;;; --- views --------------------------------------------------------
