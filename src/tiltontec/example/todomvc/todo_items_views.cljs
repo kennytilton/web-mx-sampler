@@ -5,12 +5,12 @@
     [tiltontec.matrix.api
      :refer [unbound matrix make cF cF+ cF+n cFn cFonce cI cf-freeze
              def-mget mpar mget mset! mswap! mset! with-cc
-             kid-values-kids mxu-find-type
+             kid-values-kids mxu-find-type md-name
              fasc fmu fm! minfo with-par]]
 
     [tiltontec.web-mx.api
      :refer [div section header h1 footer p ul li a
-                    input label span button]]
+             input label span button evt-md dom-tag]]
 
     [tiltontec.example.todomvc.todo
      :refer [now td-created td-completed td-delete!] :as todo]
@@ -70,16 +70,25 @@
 ;;; --- toggle all component -----------------------------------------
 
 (defn toggle-all []
-  (div {} {;; 'action' is an ad hoc bit of intermediate state that will be used to decide the
+  (div {} {:name :toggle-all
+           ;; 'action' is an ad hoc bit of intermediate state that will be used to decide the
            ;; input HTML checked attribute and will also guide the label onclick handler.
            :action (cF (if (every? td-completed (mx-todo-items me))
                          :uncomplete :complete))}
-    (input {:id        "toggle-all"
-            :class     "toggle-all"
-            :type "checkbox"
-            :checked   (cF (= (mget (mpar me) :action) :uncomplete))})
+    (input {:id      "toggle-all"
+            :class   "toggle-all"
+            :type    "checkbox"
+            :checked (cF (= (mget (mpar me) :action) :uncomplete))})
     (label {:for     "toggle-all"
-            :onclick #(let [action (mget me :action)]
+            :onclick #(let [evt %
+                            action (mget me :action)]
+                        (prn :onclick-sees action
+                                (binding [*print-level* 3]
+                                  (md-name me)))
+                        (prn :onclick-sees-evt-md
+                          :tgt (.-target evt)
+                          :id (.-id (.-target evt))
+                          :dtag (dom-tag evt))
                         ;; NB! this ^^ me is a lexical anaphor supplied by the `cFkids` formula
                         ;; macro that invisibly wraps all Web/MX component children. `me` is akin
                         ;; to Smalltalk `self` or JS `this`, and all the cF macros supply it.
@@ -103,14 +112,14 @@
   (section {:class "main"}
     (toggle-all)
     (ul {:class "todo-list"}
-      {:kid-values (cF (when-let [rte (mx-route me)]
-                         (sort-by td-created
-                           (mget (mx-todos me)
-                             (case rte
-                               "All" :items
-                               "Completed" :items-completed
-                               "Active" :items-active)))))
-       :kid-key #(mget % :todo)
+      {:kid-values  (cF (when-let [rte (mx-route me)]
+                          (sort-by td-created
+                            (mget (mx-todos me)
+                              (case rte
+                                "All" :items
+                                "Completed" :items-completed
+                                "Active" :items-active)))))
+       :kid-key     #(mget % :todo)
        :kid-factory (fn [me todo]
                       (todo-list-item todo))}
       ;; _cache is prior value for this implicit 'kids' slot; k-v-k uses it for diffing
