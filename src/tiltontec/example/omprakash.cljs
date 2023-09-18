@@ -12,8 +12,14 @@
                      svg g circle p span div]]
             [tiltontec.example.util :as ex-util]))
 
-;;; --- handy accessors ----------------------------------
+;;; --- the "DB" ----------------------------------------
 
+(def lease-info
+  (atom {:date-signed "01-02-2023"
+         :occupancy   {:move-in  "02-02-2023"
+                       :move-out "01-01-2023"}}))
+
+;;; --- handy accessors ----------------------------------
 
 (defn date-errors [id me]
   (mget (fm! id me) :errors))
@@ -27,13 +33,6 @@
 (defn valid-populated [id me]
   (when-not (date-errors id me)
     (populated id me)))
-
-;;; --- the "DB" ----------------------------------------
-
-(def lease-info
-  (atom {:date-signed "01-02-2023"
-         :occupancy   {:move-in  "02-02-2023"
-                       :move-out "01-01-2023"}}))
 
 ;;; --- validation utilities ------------------------------
 
@@ -56,16 +55,19 @@
      ;; we collect here value and errors so component can represent
      :value  (cF (mdv! :date-in :value))
      :errors (cF (not (valid-date-format? (mget me :value))))}
-    (input {:class       "input"                            ;; todo ["input" (if valid-input? nil "is-danger")]
+    (input {:class       (cF (conj ["input"]
+                               (when (mget (fmu id) :errors)
+                                 "is-danger")))
             :type        "text"
             :value       (cI initial-value)
             :placeholder "DD-MM-YYYY"
             :oninput     #(mset! (evt-md %)
-                            ;; ^^ web/mx can navigate from the event to the model, here the input proxy
                             :value (target-value %))}
       {:name :date-in})
     (p {:class "help is-danger"
-        :style (cF (str "visibility:" (if (mget (fmu id) :errors) "visible" "hidden")))}
+        :style (cF (str "visibility:"
+                     (if (mget (fmu id) :errors)
+                       "visible" "hidden")))}
       "incorrect input date format, use DD-MM-YYYY")))
 
 (defn date-range [id]
@@ -91,9 +93,15 @@
 (defn submit-button []
   (button {:class    ["button" "my-3" "is-dark"]
            :disabled (cF (mget (fmu :lease) :errors))
-           :onclick  #(let []
-                        (prn :click!!!!!!!!!))}
+           :onclick  #(let [me (evt-md %)]
+                        (reset! lease-info
+                          {:date-signed (date-value :date-signed me)
+                           :occupancy   {:move-in  (date-value :move-in me)
+                                         :move-out (date-value :move-out me)}})
+                        (prn :set!!!! @lease-info))}
     "submit"))
+
+;;; --- the app -----------------------------------------------
 
 (defn matrix-build! []
   (make ::omprakash
