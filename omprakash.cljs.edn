@@ -1,0 +1,2 @@
+^{:open-url "http://localhost:[[server-port]]/omprakash.html"}
+{:main tiltontec.example.omprakash}
