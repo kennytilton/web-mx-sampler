@@ -12,6 +12,23 @@
                      svg g circle p span div]]
             [tiltontec.example.util :as ex-util]))
 
+;;; --- Overview of this code ---------------------------
+
+; Glossary:
+;   fm!, fmu, fm* -- "family" search. These offer different
+;   ways to traverse the application looking for information.
+;
+;   mdv! -- search for a widget _and_ return a property thereof;
+;
+;   cells -- reactuve managers of individual widget properties
+;      cI -- an "input" cell, input from the reactive viewpoint;
+;            Handlers can `mset!` or `mswap!` these values.
+;            We cannot have formulas all the way down.
+;      cF, cF+, cFn -- formulaic cells, automatically kept in sync
+;            with any cell they read with `mget`
+;
+;    mget, mset!, mswap! -- API for reading/writing cell properties.
+;
 ;;; --- the "DB" ----------------------------------------
 
 (def lease-info
